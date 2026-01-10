@@ -124,6 +124,7 @@ enum TypePhase {
 	PHASE_A = 0;
 	PHASE_B = 1;
 	PHASE_C = 2;
+	PHASE_N = 3;
 }
 
 message TypeInstantaneousQuantities_PerPhase {
