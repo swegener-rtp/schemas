@@ -1,0 +1,66 @@
+{
+    "geisa-vendor-app-manifest": {
+        "manifest": {
+            "app-id": "org.lfenergy.geisa.testapp",
+            "author": "GEISA Developer",
+            "name": "Awesome App",
+            "description": "This app makes your device awesome",
+            "app-version": "1.0.0 splat",
+            "manifest-version": "1.0.0",
+            "artifacts": [
+                {
+                    "image-name": "AwesomeApp.tgz",
+                    "image-type": "appoverlay",
+                    "image-size": 262144,
+                    "uncompressed-size": 1048576,
+                    "signature": "AAAABBBBCCCCDDDDEEEEFFFF0000111122223333444455556666777788889999"
+                }
+            ],
+            "api-access": {
+                "actuator": true,
+                "messaging": true,
+                "instantaneous": false,
+                "sensor": true,
+                "waveform": false
+            },
+            "compatibility": {
+                "GEISA-API": "1.0.0",
+                "GEISA-LEE": "1.0.0",
+                "GEISA-VEE": null,
+                "toolchain-id": "aarch64-linux-musleabihf neon",
+                "toolchain-version": "1.0.0"
+            },
+            "default-configuration": {
+                "volume": 11,
+                "turbo-encabulator": "on",
+                "oscillation-overthruster": "enabled"
+            },
+            "default-launch-strategy": {
+                "auto-restart": true,
+                "max-restarts": 5,
+                "restart-period": 60,
+                "watchdog": true
+            },
+            "external-dependencies": [
+            ],
+            "communication": {
+                "messaging": {
+                    "daily-messages": 20
+                },
+                "HAN": true,
+                "local": {
+                    "daily-volume": 5000,
+                    "outbound": [
+                        "tcp::80"
+                    ]
+                }
+            },
+            "resources": {
+                "app-ram": 200,
+                "storage-persistent": 2000,
+                "storage-nonpersistent": 0
+            }
+        },
+        "signature": "052c3a40b5714de38965291d366a28df034023ed0fd423c004d56d3c1ad20d8e"
+    }
+}
