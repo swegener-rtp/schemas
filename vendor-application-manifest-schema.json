@@ -1,0 +1,372 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://github.com/geisa/schemas/blob/main/vendor-application-manifest-schema.json",
+    "title": "GEISA Vendor Application Manifest vX.Y.Z",
+    "description": "Provided Vendor recommended settings for a GEISA Application",
+    "$defs": {
+        "transportAddressPort": {
+            "type": "array",
+            "$comment": "transport:address:port notation for network permissions.",
+            "items": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^([Tt][Cc][Pp]:|[Uu][Dd][Pp]:|)([0-9A-Fa-f:\\.]+|\\[[0-9A-Fa-f:\\.]+\\]|)(:[0-9]+)$",
+                "$comment": "The RegEx above will match things beginning with a TCP, UDP, or nothing, followed by an IPv4 or v6 address (or not), and a port (required).  It does not validate the address itself."
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "networkAccessRequirements": {
+            "type": "object",
+            "properties": {
+                "daily-volume": {
+                    "description": "The number of bytes the application needs to exchange each day through this interface.",
+                    "type": "integer"
+                },
+                "inbound": {
+                    "$comment": "transport/address/port tuples allowed inbound.",
+                    "$ref": "#/$defs/transportAddressPort"
+                },
+                "outbound": {
+                    "$comment": "transport/address/port tuples allowed outbound.",
+                    "$ref": "#/$defs/transportAddressPort"
+                }
+            },
+            "required": [
+                "daily-volume"
+            ],
+            "$comment": "If a networkAccessRequirements object is present it must include at least one inbound or outbound permission.",
+            "anyOf": [
+                {
+                    "required": [
+                        "inbound"
+                    ]
+                },
+                {
+                    "required": [
+                        "outbound"
+                    ]
+                }
+            ]
+        },
+        "sha256Signature": {
+            "type": "string",
+            "description": "SHA256 hash of in hexidecimal.",
+            "pattern": "^[0-9A-Fa-f]+$",
+            "minLength": 64,
+            "maxLength": 64
+        },
+        "fixedVerion": {
+            "type": "string",
+            "$comment": "fixedVersions do not allow values beyond the X.Y.Z triplet.",
+            "pattern": "^[0-9]{1,}\\.[0-9]{1,}\\.[0-9]{1,}$"
+        },
+        "fixedVersionOrNull": {
+            "$comment": "Allows for cases in which the version is set to null to indicate the feature is not supported.",
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/fixedVerion"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "geisaArtifact": {
+            "type": "object",
+            "$comment": "A GEISA app will have at least one artifact.  GEISA 1.0.0 supports a single type.  Other image types may be added in the future.",
+            "required": [
+                "image-name",
+                "image-type",
+                "image-size",
+                "signature",
+                "uncompressed-size"
+            ],
+            "properties": {
+                "image-name": {
+                    "description": "Full bare file name of the image (e.g. no path, but including extension).",
+                    "type": "string",
+                    "minLength": 4,
+                    "maxLength": 256
+                },
+                "image-type": {
+                    "description": "Type of the image file.",
+                    "enum": [
+                        "appoverlay"
+                    ],
+                    "$comment": "Additional image types may be added over time."
+                },
+                "image-size": {
+                    "description": "Size of the compressed image file in bytes.",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "uncompressed-size": {
+                    "description": "Size of the uncompressed image in bytes.",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "signature": {
+                    "$ref": "#/$defs/sha256Signature"
+                }
+            }
+        }
+    },
+    "type": "object",
+    "required": [
+        "geisa-vendor-app-manifest"
+    ],
+    "properties": {
+        "geisa-vendor-app-manifest": {
+            "type": "object",
+            "required": [
+                "manifest",
+                "signature"
+            ],
+            "properties": {
+                "manifest": {
+                    "type": "object",
+                    "required": [
+                        "api-access",
+                        "app-id",
+                        "app-version",
+                        "artifacts",
+                        "author",
+                        "communication",
+                        "compatibility",
+                        "default-configuration",
+                        "default-launch-strategy",
+                        "description",
+                        "external-dependencies",
+                        "manifest-version",
+                        "name",
+                        "resources"
+                    ],
+                    "properties": {
+                        "app-id": {
+                            "description": "Vendor assigned Text-based ID of the application, following reverse DNS name notation.",
+                            "type": "string",
+                            "minLength": 4
+                        },
+                        "author": {
+                            "description": "Author of the application.  Typically a company or programmer.",
+                            "type": "string",
+                            "minLength": 4
+                        },
+                        "name": {
+                            "description": "Name of the application.",
+                            "type": "string",
+                            "minLength": 4
+                        },
+                        "description": {
+                            "description": "Description of the application.",
+                            "type": "string"
+                        },
+                        "app-version": {
+                            "description": "Version number of the application.",
+                            "type": "string",
+                            "pattern": "^[0-9]{1,}\\.[0-9]{1,}\\.[0-9]{1,}\\b.*$",
+                            "$comment": "The \b.* allows arbitrary text after the numeric version triplet, but only if it is separated in someway."
+                        },
+                        "manifest-version": {
+                            "description": "Version number of the GEISA manifest format per the GEISA specification in use.",
+                            "const": "1.0.0"
+                        },
+                        "api-access": {
+                            "type": "object",
+                            "properties": {
+                                "actuator": {
+                                    "description": "Whether the application requires access to the actuator API.",
+                                    "type": "boolean"
+                                },
+                                "messaging": {
+                                    "description": "Whether the application requires access to the messaging API.",
+                                    "type": "boolean"
+                                },
+                                "instantaneous": {
+                                    "description": "Whether the application requires access to the instantaneous data API.",
+                                    "type": "boolean"
+                                },
+                                "sensor": {
+                                    "description": "Whether the application requires access to the sensor data API.",
+                                    "type": "boolean"
+                                },
+                                "waveform": {
+                                    "description": "Whether the application requires access to the waveform data API.",
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "artifacts": {
+                            "type": "array",
+                            "description": "List of one or more artifacts that comprise the application.",
+                            "items": {
+                                "$ref": "#/$defs/geisaArtifact",
+                                "minItems": 1
+                            }
+                        },
+                        "compatibility": {
+                            "description": "Details about what platforms this application is compatible with",
+                            "type": "object",
+                            "required": [
+                                "GEISA-API",
+                                "GEISA-LEE",
+                                "GEISA-VEE",
+                                "toolchain-id",
+                                "toolchain-version"
+                            ],
+                            "properties": {
+                                "GEISA-API": {
+                                    "description": "Version of GEISA-API required.",
+                                    "$ref": "#/$defs/fixedVerion"
+                                },
+                                "GEISA-LEE": {
+                                    "description": "Version of GEISA-LEE required. Null if unsupported.",
+                                    "$refs": "#/$defs/fixedVersionOrNull"
+                                },
+                                "GEISA-VEE": {
+                                    "description": "Version of GEISA-API required. Null if unsupported.",
+                                    "$refs": "#/$defs/fixedVersionOrNull"
+                                },
+                                "toolchain-id": {
+                                    "description": "Toolchain-id as provided by the toolchain vendors, typically platform provider ID and the target triplet, but may include other data",
+                                    "type": "string",
+                                    "minLength": 4,
+                                    "maxLength": 256
+                                },
+                                "toolchain-version": {
+                                    "description": "Version of the toolchain required.",
+                                    "$ref": "#/$defs/fixedVerion"
+                                }
+                            }
+                        },
+                        "resources": {
+                            "type": "object",
+                            "required": [
+                                "app-ram",
+                                "storage-nonpersistent",
+                                "storage-persistent"
+                            ],
+                            "properties": {
+                                "app-cpu": {
+                                    "description": "The minimum percentage of CPU this application requires.",
+                                    "type": "integer",
+                                    "minimum": 1
+                                },
+                                "app-ram": {
+                                    "description": "The amount of RAM in KiB the application requires.",
+                                    "type": "integer",
+                                    "minimum": 1
+                                },
+                                "storage-persistent": {
+                                    "description": "The amount of storage in KiB the application requires.",
+                                    "type": "integer",
+                                    "minimum": 1
+                                },
+                                "storage-nonpersistent": {
+                                    "description": "The amount of non-persistant storage (temp space) the application requires.",
+                                    "type": "integer"
+                                },
+                                "threads": {
+                                    "description": "The minimum number of threads the application requires.",
+                                    "type": "integer",
+                                    "minimum": 1
+                                }
+                            }
+                        },
+                        "communication": {
+                            "type": "object",
+                            "properties": {
+                                "FAN": {
+                                    "description": "Whether the application needs direct access to the FAN / Utility Network.",
+                                    "type": "boolean",
+                                    "$comment": "This setting is independent of access to the messaging API."
+                                },
+                                "HAN": {
+                                    "description": "Whether the applications needs direct access to the HAN / Consumer Network.",
+                                    "type": "boolean",
+                                    "$comment": "This setting is independent of access to the messaging API."
+                                },
+                                "message": {
+                                    "type": "object",
+                                    "$comment": "If the application doesn't use system messaging, set to zero.  Apps may use messaging even if they do not have direct interface access.",
+                                    "required": [
+                                        "daily-messages"
+                                    ],
+                                    "properties": {
+                                        "daily-messages": {
+                                            "description": "Allowed message count",
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "operator": {
+                                    "description": "Allowed data rates and addresses for operator network (FAN).",
+                                    "$ref": "#/$defs/networkAccessRequirements"
+                                },
+                                "internet": {
+                                    "description": "Allowed data rates and addresses for public internet network.",
+                                    "$ref": "#/$defs/networkAccessRequirements"
+                                },
+                                "local": {
+                                    "description": "Allowed data rates and addresses for local device network (HAN).",
+                                    "$ref": "#/$defs/networkAccessRequirements"
+                                }
+                            }
+                        },
+                        "external-dependencies": {
+                            "type": "array",
+                            "description": "This array lists the external dependendencies this application has.  This is expected to be a list of other applications, but this is not enforced in GEISA 1.0.",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "default-launch-strategy": {
+                            "type": "object",
+                            "description": "Default settings for launching & restarting the application.",
+                            "required": [
+                                "auto-restart",
+                                "max-restarts",
+                                "restart-period",
+                                "watchdog"
+                            ],
+                            "properties": {
+                                "start-string": {
+                                    "description": "Command to use to start the app.  If not provided, assumed to be init for LEE.",
+                                    "type": "string"
+                                },
+                                "stop-string": {
+                                    "description": "Command to use to stop the app.  If not provided, assumed to be shutdown of the container for LEE.",
+                                    "type": "string"
+                                },
+                                "watchdog": {
+                                    "description": "Indicates whether the application supports petting the GEISA watchdog.  Applications with this set to true will be considered to have failed if they do not periodically send watchdog messages over the GEISA API.",
+                                    "type": "boolean"
+                                },
+                                "auto-restart": {
+                                    "description": "Should the application automatically be restarted if it fails?",
+                                    "type": "boolean"
+                                },
+                                "max restarts": {
+                                    "description": "What is the maximum number of automatic restarts before marking the application as failed.",
+                                    "type": "integer"
+                                },
+                                "restart period": {
+                                    "description": "Over what period (in minutes) can those restarts occur?",
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "default-configuration": {
+                            "description": "The default configuration is vendor provided JSON object that the platform will make available to the app.  It's provided through the manifest process to allow the system operator to adjust it.",
+                            "type": "object"
+                        }
+                    }
+                },
+                "signature": {
+                    "$ref": "#/$defs/sha256Signature"
+                }
+            }
+        }
+    }
+}
