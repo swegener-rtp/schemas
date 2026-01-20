@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-message BillingQuantities_Summation_Total {
+message GeisaBillingQuantities_Summation_Total {
     uint32 message_version = 1; // Example: 1,2 …
 	uint64 timestamp = 2;	// Timestamp in microseconds UNIX Epoch time
 	int64 microWh_Del = 3;    // Active Energy = Wh, Total Delivered, Fundamental + harmonics
@@ -50,62 +50,62 @@ message BillingQuantities_Summation_Total {
 	int64 microVAh_Del_Q2_minus_Q3 = 47;    // Vectorial Apparent Energy = VAh, Received: SQRT(Wh_rec^2+[Q2-Q3]^2), Fundamental + harmonics
 }
 
-message TypeMaxDemand {
+message GeisaTypeMaxDemand {
 	uint64 maxDemandTime = 1;
 	int64 quantity = 2;
 }
 
-message BillingQuantities_Demand_Total {
+message GeisaBillingQuantities_Demand_Total {
     uint32 message_version = 1; // Example: 1,2 …
 	uint64 timestamp = 2;	// Timestamp in microseconds UNIX Epoch time
-	TypeMaxDemand microW_Del = 3;    // Active Energy = W, Total Delivered, Fundamental + harmonics
-	TypeMaxDemand microW_Rec = 4;    // Active Energy = W, Total Received, Fundamental + harmonics
-	TypeMaxDemand microW_Sum = 5;    // Active Energy = W, Total Sum, Fundamental + harmonics
-	TypeMaxDemand microW_Net = 6;    // Active Energy = W, Total Net, Fundamental + harmonics
-	TypeMaxDemand microVAR_Del = 7;    // Reactive Energy = VAR, Total Delivered, Fundamental + harmonics
-	TypeMaxDemand microVAR_Rec = 8;    // Reactive Energy = VAR, Total Received, Fundamental + harmonics
-	TypeMaxDemand microVAR_Sum = 9;    // Reactive Energy = VAR, Total Sum, Fundamental + harmonics
-	TypeMaxDemand microVAR_Net = 10;    // Reactive Energy = VAR, Total Net, Fundamental + harmonics
-	TypeMaxDemand microVAR_Q1_plus_Q4 = 11;    // Reactive Energy = VAR, Q1+Q4, Fundamental + harmonics
-	TypeMaxDemand microVAR_Q2_plus_Q3 = 12;    // Reactive Energy = VAR, Q2+Q3, Fundamental + harmonics
-	TypeMaxDemand microVAR_Q1 = 13;    // Reactive Energy = VAR, Q1, Fundamental + harmonics
-	TypeMaxDemand microVAR_Q2 = 14;    // Reactive Energy = VAR, Q2, Fundamental + harmonics
-	TypeMaxDemand microVAR_Q3 = 15;    // Reactive Energy = VAR, Q3, Fundamental + harmonics
-	TypeMaxDemand microVAR_Q4 = 16;    // Reactive Energy = VAR, Q4, Fundamental + harmonics
-	TypeMaxDemand microVA_Del_aritmetic = 17;    // Aritmetic Apparent Energy = VA, Total Delivered, Fundamental + harmonics
-	TypeMaxDemand microVA_Rec_aritmetic = 18;    // Aritmetic Apparent Energy = VA, Total Received, Fundamental + harmonics
-	TypeMaxDemand microVA_Sum_aritmetic = 19;    // Aritmetic Apparent Energy = VA, Total Sum, Fundamental + harmonics
-	TypeMaxDemand microW_Del_fundamental = 20;    // Active Energy = W, Total Delivered, Fundamental Only
-	TypeMaxDemand microW_Rec_fundamental = 21;    // Active Energy = W, Total Received, Fundamental Only
-	TypeMaxDemand microVA_Sum = 22;    // Vectorial Apparent Energy = VA, Total Sum: SQRT(W_sum^2+VAR_sum^2), Fundamental + harmonics
-	TypeMaxDemand microVA_Del_Q1_plus_Q4 = 23;    // Vectorial Apparent Energy = VA, Delivered: SQRT(W_del^2+[Q1+Q4]^2), Fundamental + harmonics
-	TypeMaxDemand microVA_Rec_Q2_plus_Q3 = 24;    // Vectorial Apparent Energy = VA, Received: SQRT(W_rec^2+[Q2+Q3]^2), Fundamental + harmonics
-	TypeMaxDemand PF_microW_Del_microVA_Del_aritmetic = 25;    // Power Factor (Aritmetic) = W, Delivered & VA_aritmetic, Delivered: Fundamental + harmonics
-	TypeMaxDemand PF_microW_Rec_microVA_Rec_aritmetic = 26;    // Power Factor (Aritmetic) = W, Received & VA_aritmetic, Received: Fundamental + harmonics
-	TypeMaxDemand PF_microW_Sum_microVA_Sum_aritmetic = 27;    // Power Factor (Aritmetic) = W, Sum & VA_aritmetic, Sum: Fundamental + harmonics
-	TypeMaxDemand microVAR_Del_fundamental = 28;    // Reactive Energy = VAR, Total Delivered, Fundamental Only
-	TypeMaxDemand microVAR_Rec_fundamental = 29;    // Reactive Energy = VAR, Total Received, Fundamental Only
-	TypeMaxDemand PF_microW_Del_microVAR_Q1_plus_Q4 = 30;    // Power Factor (Vectorial) = W, Delivered & VAR, Q1+4: Fundamental + harmonics
-	TypeMaxDemand PF_microW_Rec_microVAR_Q2_plus_Q3 = 31;    // Power Factor (Vectorial) = W, Received & VAR, Q2+3: Fundamental + harmonics
-	TypeMaxDemand microW_Sum_fundamental = 32;    // Active Energy = W, Total Sum, Fundamental Only
-	TypeMaxDemand microW_Net_fundamental = 33;    // Active Energy = W, Total Net, Fundamental Only
-	TypeMaxDemand microVAR_Q1_fundamental = 34;    // Reactive Energy = VAR, Q1, Fundamental Only
-	TypeMaxDemand microVAR_Q2_fundamental = 35;    // Reactive Energy = VAR, Q2, Fundamental Only
-	TypeMaxDemand microVAR_Q3_fundamental = 36;    // Reactive Energy = VAR, Q3, Fundamental Only
-	TypeMaxDemand microVAR_Q4_fundamental = 37;    // Reactive Energy = VAR, Q4, Fundamental Only
-	TypeMaxDemand microVAR_Q1_plus_Q4_fundamental = 38;    // Reactive Energy = VAR, Q1+Q4, Fundamental Only
-	TypeMaxDemand microVAR_Q2_plus_Q3_fundamental = 39;    // Reactive Energy = VAR, Q2+Q3, Fundamental Only
-	TypeMaxDemand microVA_Del_fundamental = 40;    // Aritmetic Apparent Energy = VA, Total Delivered, Fundamental Only
-	TypeMaxDemand microVA_Rec_fundamental = 41;    // Aritmetic Apparent Energy = VA, Total Received, Fundamental Only
-	TypeMaxDemand microVAR_Q1_minus_Q4 = 42;    // Reactive Energy = VAR, Q1-Q4, Fundamental + harmonics
-	TypeMaxDemand microVAR_Q3_minus_Q2 = 43;    // Reactive Energy = VAR, Q3-Q2, Fundamental + harmonics
-	TypeMaxDemand microVAR_Q2_minus_Q3 = 44;    // Reactive Energy = VAR, Q2-Q3, Fundamental + harmonics
-	TypeMaxDemand microVA_Del_Q1_minus_Q4 = 45;    // Vectorial Apparent Energy = VA, Delivered: SQRT(W_del^2+[Q1-Q4]^2), Fundamental + harmonics
-	TypeMaxDemand microVA_Rec_Q3_minus_Q2 = 46;    // Vectorial Apparent Energy = VA, Received: SQRT(W_rec^2+[Q3-Q2]^2), Fundamental + harmonics
-	TypeMaxDemand microVA_Del_Q2_minus_Q3 = 47;    // Vectorial Apparent Energy = VA, Received: SQRT(W_rec^2+[Q2-Q3]^2), Fundamental + harmonics
+	GeisaTypeMaxDemand microW_Del = 3;    // Active Energy = W, Total Delivered, Fundamental + harmonics
+	GeisaTypeMaxDemand microW_Rec = 4;    // Active Energy = W, Total Received, Fundamental + harmonics
+	GeisaTypeMaxDemand microW_Sum = 5;    // Active Energy = W, Total Sum, Fundamental + harmonics
+	GeisaTypeMaxDemand microW_Net = 6;    // Active Energy = W, Total Net, Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Del = 7;    // Reactive Energy = VAR, Total Delivered, Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Rec = 8;    // Reactive Energy = VAR, Total Received, Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Sum = 9;    // Reactive Energy = VAR, Total Sum, Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Net = 10;    // Reactive Energy = VAR, Total Net, Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Q1_plus_Q4 = 11;    // Reactive Energy = VAR, Q1+Q4, Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Q2_plus_Q3 = 12;    // Reactive Energy = VAR, Q2+Q3, Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Q1 = 13;    // Reactive Energy = VAR, Q1, Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Q2 = 14;    // Reactive Energy = VAR, Q2, Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Q3 = 15;    // Reactive Energy = VAR, Q3, Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Q4 = 16;    // Reactive Energy = VAR, Q4, Fundamental + harmonics
+	GeisaTypeMaxDemand microVA_Del_aritmetic = 17;    // Aritmetic Apparent Energy = VA, Total Delivered, Fundamental + harmonics
+	GeisaTypeMaxDemand microVA_Rec_aritmetic = 18;    // Aritmetic Apparent Energy = VA, Total Received, Fundamental + harmonics
+	GeisaTypeMaxDemand microVA_Sum_aritmetic = 19;    // Aritmetic Apparent Energy = VA, Total Sum, Fundamental + harmonics
+	GeisaTypeMaxDemand microW_Del_fundamental = 20;    // Active Energy = W, Total Delivered, Fundamental Only
+	GeisaTypeMaxDemand microW_Rec_fundamental = 21;    // Active Energy = W, Total Received, Fundamental Only
+	GeisaTypeMaxDemand microVA_Sum = 22;    // Vectorial Apparent Energy = VA, Total Sum: SQRT(W_sum^2+VAR_sum^2), Fundamental + harmonics
+	GeisaTypeMaxDemand microVA_Del_Q1_plus_Q4 = 23;    // Vectorial Apparent Energy = VA, Delivered: SQRT(W_del^2+[Q1+Q4]^2), Fundamental + harmonics
+	GeisaTypeMaxDemand microVA_Rec_Q2_plus_Q3 = 24;    // Vectorial Apparent Energy = VA, Received: SQRT(W_rec^2+[Q2+Q3]^2), Fundamental + harmonics
+	GeisaTypeMaxDemand PF_microW_Del_microVA_Del_aritmetic = 25;    // Power Factor (Aritmetic) = W, Delivered & VA_aritmetic, Delivered: Fundamental + harmonics
+	GeisaTypeMaxDemand PF_microW_Rec_microVA_Rec_aritmetic = 26;    // Power Factor (Aritmetic) = W, Received & VA_aritmetic, Received: Fundamental + harmonics
+	GeisaTypeMaxDemand PF_microW_Sum_microVA_Sum_aritmetic = 27;    // Power Factor (Aritmetic) = W, Sum & VA_aritmetic, Sum: Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Del_fundamental = 28;    // Reactive Energy = VAR, Total Delivered, Fundamental Only
+	GeisaTypeMaxDemand microVAR_Rec_fundamental = 29;    // Reactive Energy = VAR, Total Received, Fundamental Only
+	GeisaTypeMaxDemand PF_microW_Del_microVAR_Q1_plus_Q4 = 30;    // Power Factor (Vectorial) = W, Delivered & VAR, Q1+4: Fundamental + harmonics
+	GeisaTypeMaxDemand PF_microW_Rec_microVAR_Q2_plus_Q3 = 31;    // Power Factor (Vectorial) = W, Received & VAR, Q2+3: Fundamental + harmonics
+	GeisaTypeMaxDemand microW_Sum_fundamental = 32;    // Active Energy = W, Total Sum, Fundamental Only
+	GeisaTypeMaxDemand microW_Net_fundamental = 33;    // Active Energy = W, Total Net, Fundamental Only
+	GeisaTypeMaxDemand microVAR_Q1_fundamental = 34;    // Reactive Energy = VAR, Q1, Fundamental Only
+	GeisaTypeMaxDemand microVAR_Q2_fundamental = 35;    // Reactive Energy = VAR, Q2, Fundamental Only
+	GeisaTypeMaxDemand microVAR_Q3_fundamental = 36;    // Reactive Energy = VAR, Q3, Fundamental Only
+	GeisaTypeMaxDemand microVAR_Q4_fundamental = 37;    // Reactive Energy = VAR, Q4, Fundamental Only
+	GeisaTypeMaxDemand microVAR_Q1_plus_Q4_fundamental = 38;    // Reactive Energy = VAR, Q1+Q4, Fundamental Only
+	GeisaTypeMaxDemand microVAR_Q2_plus_Q3_fundamental = 39;    // Reactive Energy = VAR, Q2+Q3, Fundamental Only
+	GeisaTypeMaxDemand microVA_Del_fundamental = 40;    // Aritmetic Apparent Energy = VA, Total Delivered, Fundamental Only
+	GeisaTypeMaxDemand microVA_Rec_fundamental = 41;    // Aritmetic Apparent Energy = VA, Total Received, Fundamental Only
+	GeisaTypeMaxDemand microVAR_Q1_minus_Q4 = 42;    // Reactive Energy = VAR, Q1-Q4, Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Q3_minus_Q2 = 43;    // Reactive Energy = VAR, Q3-Q2, Fundamental + harmonics
+	GeisaTypeMaxDemand microVAR_Q2_minus_Q3 = 44;    // Reactive Energy = VAR, Q2-Q3, Fundamental + harmonics
+	GeisaTypeMaxDemand microVA_Del_Q1_minus_Q4 = 45;    // Vectorial Apparent Energy = VA, Delivered: SQRT(W_del^2+[Q1-Q4]^2), Fundamental + harmonics
+	GeisaTypeMaxDemand microVA_Rec_Q3_minus_Q2 = 46;    // Vectorial Apparent Energy = VA, Received: SQRT(W_rec^2+[Q3-Q2]^2), Fundamental + harmonics
+	GeisaTypeMaxDemand microVA_Del_Q2_minus_Q3 = 47;    // Vectorial Apparent Energy = VA, Received: SQRT(W_rec^2+[Q2-Q3]^2), Fundamental + harmonics
 }
 
-message TypeInstantaneousQuantities_System {
+message GeisaTypeInstantaneousQuantities_System {
     uint32 message_version = 1; // Example: 1,2 …
 	uint64 timestamp = 2;	// Timestamp in microseconds UNIX Epoch time
 	float Line_frequency = 3;    // Frequency
@@ -120,16 +120,16 @@ message TypeInstantaneousQuantities_System {
 	float System_PF_Angle_vectorial = 12;    // Power Factor Angle, Vectorial, System, Fundamental + harmonics
 }
 
-enum TypePhase {
+enum GeisaTypePhase {
 	PHASE_A = 0;
 	PHASE_B = 1;
 	PHASE_C = 2;
 	PHASE_N = 3;
 }
 
-message TypeInstantaneousQuantities_PerPhase {
+message GeisaTypeInstantaneousQuantities_PerPhase {
     uint32 message_version = 1; // Example: 1,2 …
-	TypePhase phase = 2;
+	GeisaTypePhase phase = 2;
 	float microAmps = 3;    // Current rms per phase, Fundamental + harmonics
 	float microVolts = 4;    // Voltage rms per phase, Fundamental + harmonics
 	float microW = 5;    // Active Power = Watts per phase, Fundamental + harmonics
@@ -148,20 +148,20 @@ message TypeInstantaneousQuantities_PerPhase {
 	float Phase_Voltage_percentage_2nd_Harmonic = 18;    // 2nd Harmonic Voltage Percentage, per phase
 }
 
-message TypeInstantaneousQuantities_Other {
+message GeisaTypeInstantaneousQuantities_Other {
     uint32 message_version = 1; // Example: 1,2 …
 	uint64 timestamp = 2;	// Timestamp in microseconds UNIX Epoch time
 	float Neutral_Imputed_microAmps = 3;    // Current rms, Neutral imputed, Fundamental + harmonics
 	float Load_Side_microVolts = 4;    // Load Side Voltage
 }
 
-message TypeHarmonic {
+message GeisaTypeHarmonic {
 	repeated float harmonic_Voltage = 1;
 	repeated float harmonic_Current = 2;
 }
 
 // Although instantaneous quantities, harmonics are considered in a category of their own
-message InstantaneousQuantities_Harmonic {
+message GeisaInstantaneousQuantities_Harmonic {
 	uint32 message_version = 1; // Example: 1,2 …
 	uint64 timestamp = 2;	// Timestamp in microseconds UNIX Epoch time
 
@@ -173,28 +173,28 @@ message InstantaneousQuantities_Harmonic {
 	float Phase_B_microVolts_2nd_Harmonic = 7;    // Voltage rms, phase B, 2nd_Harmonic
 	float Phase_C_microVolts_2nd_Harmonic = 8;    // Voltage rms, phase C, 2nd_Harmonic
 
-	TypeHarmonic harmonic_Phase_A = 9;
-	TypeHarmonic harmonic_Phase_B = 10;
-	TypeHarmonic harmonic_Phase_C = 11;
+	GeisaTypeHarmonic harmonic_Phase_A = 9;
+	GeisaTypeHarmonic harmonic_Phase_B = 10;
+	GeisaTypeHarmonic harmonic_Phase_C = 11;
 }
 
 // This is the most outer message for billing quantities. In the future we might add more than total summations/demands to this message
-message BillingQuantities {
+message GeisaBillingQuantities {
 	uint32 message_version = 1; // Example: 1,2 …
-	BillingQuantities_Summation_Total summation_Total = 2;
-	BillingQuantities_Demand_Total demand_Total = 3;
+	GeisaBillingQuantities_Summation_Total summation_Total = 2;
+	GeisaBillingQuantities_Demand_Total demand_Total = 3;
 }
 
 // This is the most outer message for Instantanous quantities
 // Message topic: geisa/api/instantaneous-data
-message InstantaneousQuantities {
+message GeisaInstantaneousQuantities {
 	uint64 timestamp = 1;
-	TypeInstantaneousQuantities_PerPhase phase_A = 2;
-	TypeInstantaneousQuantities_PerPhase phase_B = 3;
-	TypeInstantaneousQuantities_PerPhase phase_C = 4;
-	TypeInstantaneousQuantities_PerPhase phase_N = 5;	// Neutral "phase" measurements
-	TypeInstantaneousQuantities_Other other = 6;	// Various other instantaneous quantities that are nto per phase or system
+	GeisaTypeInstantaneousQuantities_PerPhase phase_A = 2;
+	GeisaTypeInstantaneousQuantities_PerPhase phase_B = 3;
+	GeisaTypeInstantaneousQuantities_PerPhase phase_C = 4;
+	GeisaTypeInstantaneousQuantities_PerPhase phase_N = 5;// Neutral "phase" measurements
+	GeisaTypeInstantaneousQuantities_Other other = 6; // Various other instantaneous quantities that are nto per phase or system
+	float frequency_hz = 7;
+	float temperature_celsius = 8;
 }
-
-
 
