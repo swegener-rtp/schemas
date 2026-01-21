@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-message PlatformDiscovery_GEISA {
+message GeisaPlatformDiscovery_GEISA {
 	int32 ver_major = 1;
 	int32 ver_minor = 2;
 	int32 ver_rev = 3;
@@ -10,7 +10,7 @@ message PlatformDiscovery_GEISA {
 	bool piller_vee = 13;
 }
 
-enum PlatformDiscovery_Type {
+enum GeisaPlatformDiscovery_Type {
 	DEVICE_TYPE_UNSPECIFIED = 0;
 
 	DEVICE_TYPE_ELECTRIC_METER = 100;
@@ -21,8 +21,8 @@ enum PlatformDiscovery_Type {
 	DEVICE_TYPE_COPROCESSOR_CARD = 203;
 }
 
-message PlatformDiscovery_Module {
-	PlatformDiscovery_Type type = 1;
+message GeisaPlatformDiscovery_Module {
+	GeisaPlatformDiscovery_Type type = 1;
 	string manufacturer = 2;
 	string model = 3;
 	string serial_number = 4;
@@ -30,42 +30,42 @@ message PlatformDiscovery_Module {
 	string fw_revision = 6;
 }
 
-message PlatformDiscovery_Device {
-	PlatformDiscovery_Module top_module = 1;
-	repeated PlatformDiscovery_Module sub_module = 2;
+message GeisaPlatformDiscovery_Device {
+	GeisaPlatformDiscovery_Module top_module = 1;
+	repeated GeisaPlatformDiscovery_Module sub_module = 2;
 }
 
-message PlatformDiscovery_Operator {
+message GeisaPlatformDiscovery_Operator {
 	/* TBD */
 }
 
-message PlatformDiscovery_Metrology {
+message GeisaPlatformDiscovery_Metrology {
 	/* TBD */
 }
 
-message PlatformDiscovery_Sensor {
+message GeisaPlatformDiscovery_Sensor {
 	/* TBD */
 }
 
-message PlatformDiscovery_Network {
+message GeisaPlatformDiscovery_Network {
 	/* TBD */
 }
 
-enum Waveform_Datatype {
+enum GeisaWaveform_Datatype {
 	DATA_INT16 = 0;
 	DATA_INT32 = 1;
 	DATA_FLOAT32 = 2;
 	DATA_FLOAT64 = 3;
 }
 
-message PlatformDiscovery_Waveform_Instance {
+message GeisaPlatformDiscovery_Waveform_Instance {
 	// platforms may provide multiple instances of a waveform with different attributes.
 	// the application may subscribe to any or multiple of these by instance id.
 	int32 instance_id = 1;
 
 	string data_connection = 100;	// path to AF_UNIX socket
 
-	Waveform_Datatype datatype = 200;
+	GeisaWaveform_Datatype datatype = 200;
 	// when datatype is int16 or int32, these multiplers can be applied by the application
 	// to convert from those unitless values into "volts" or "amps" respectivly.
 	double voltage_multiplier = 201;
@@ -96,38 +96,40 @@ message PlatformDiscovery_Waveform_Instance {
 	int32 current_filter_highpass = 503;
 }
 
-message PlatformDiscovery_Waveform {
-	repeated PlatformDiscovery_Waveform_Instance instances = 1;
+message GeisaPlatformDiscovery_Waveform {
+	repeated GeisaPlatformDiscovery_Waveform_Instance instances = 1;
 }
 
 
-// This is the most outer message for Platform Discovery Request
+// This is the most outer message for GeisaPlatform Discovery Request
 // Message topic: geisa/api/platform-discovery-req
-message PlatformDiscovery_Req {
+// NOTE: Empty message for now but may be used in future
+message GeisaPlatformDiscovery_Req {
 }
 
-// This is the most outer message for Platform Discovery Response
+// This is the most outer message for GeisaPlatform Discovery Response
 // Message topic: geisa/api/platform-discovery-rsp
-message PlatformDiscovery_Rsp {
-	PlatformDiscovery_GEISA geisa = 1;
-	PlatformDiscovery_Device device = 2;
-	PlatformDiscovery_Operator operator = 3;
-	PlatformDiscovery_Metrology metrology = 4;
-	PlatformDiscovery_Sensor sensor = 5;
-	PlatformDiscovery_Network network = 6;
-	PlatformDiscovery_Waveform waveform = 7;
+message GeisaPlatformDiscovery_Rsp {
+	GeisaPlatformDiscovery_GEISA geisa = 1;
+	GeisaPlatformDiscovery_Device device = 2;
+	GeisaPlatformDiscovery_Operator operator = 3;
+	GeisaPlatformDiscovery_Metrology metrology = 4;
+	GeisaPlatformDiscovery_Sensor sensor = 5;
+	GeisaPlatformDiscovery_Network network = 6;
+	GeisaPlatformDiscovery_Waveform waveform = 7;
 }
 
 
 // This is the most outer message for Application Manifest Request
 // Message topic: geisa/api/app-manifest-req/<userid>
+// NOTE: Empty message for now but may be used in future
 message ApplicationManifest_Req {
 }
 
 // This is the most outer message for Application Manifest Response
 // Message topic: geisa/api/app-manifest-rsp/<userid>
 message ApplicationManifest_Rsp {
-	bytes manifest = 1; // TBD: spec shows this as json?
+	string manifest = 1; // Spec shows this as json
 }
 
 
