@@ -325,10 +325,9 @@
                             "type": "object",
                             "description": "Default settings for launching & restarting the application.",
                             "required": [
-                                "auto-restart",
-                                "max-restarts",
-                                "restart-period",
-                                "watchdog"
+                                "start-timeout",
+                                "stop-timeout",
+                                "notify-timeout"
                             ],
                             "properties": {
                                 "start-string": {
@@ -339,21 +338,24 @@
                                     "description": "Command to use to stop the app.  If not provided, assumed to be shutdown of the container for LEE.",
                                     "type": "string"
                                 },
-                                "watchdog": {
-                                    "description": "Indicates whether the application supports petting the GEISA watchdog.  Applications with this set to true will be considered to have failed if they do not periodically send watchdog messages over the GEISA API.",
+                                "start-background": {
+                                    "description": "If present, indicates whether the start-string command will will exit/return once launched (true) or continue running indefinantly (false or absent).",
                                     "type": "boolean"
                                 },
-                                "auto-restart": {
-                                    "description": "Should the application automatically be restarted if it fails?",
-                                    "type": "boolean"
+                                "start-timeout": {
+                                    "description": "Indicates the maximum time the start command will take before a failure to start should be declared. (in seconds)  This value is unused if start-background is not true.",
+                                    "type": "integer",
+                                    "maximum": 60
                                 },
-                                "max restarts": {
-                                    "description": "What is the maximum number of automatic restarts before marking the application as failed.",
-                                    "type": "integer"
+                                "stop-timeout": {
+                                    "description": "Indicates the maximum time the stop command is allowed to take before the application and the stop command itself are forcibly stopped. (in seconds)",
+                                    "type": "integer",
+                                    "maximum": 60
                                 },
-                                "restart period": {
-                                    "description": "Over what period (in minutes) can those restarts occur?",
-                                    "type": "integer"
+                                "notify-timeout": {
+                                    "description": "Indicates the maximum time the app requires to initialize, become ready for operation, and notify the GEISA platform via the message bus it is running. (in seconds)",
+                                    "type": "integer",
+                                    "maximum": 120
                                 }
                             }
                         },
