@@ -339,21 +339,21 @@
                                     "type": "string"
                                 },
                                 "start-background": {
-                                    "description": "If present, indicates whether the start-string command will will exit/return once launched (true) or continue running indefinantly (false or absent).",
+                                    "description": "Indicates whether the start-string command will exit/return once launched (true) or continue running indefinently (false). Defaults to false if absent.",
                                     "type": "boolean"
                                 },
                                 "start-timeout": {
-                                    "description": "Indicates the maximum time the start command will take before a failure to start should be declared. (in seconds)  This value is unused if start-background is not true.",
+                                    "description": "Indicates the maximum time the start command will take before a failure to start should be declared (in seconds).  This value is unused if start-background is not true.",
                                     "type": "integer",
                                     "maximum": 60
                                 },
                                 "stop-timeout": {
-                                    "description": "Indicates the maximum time the stop command is allowed to take before the application and the stop command itself are forcibly stopped. (in seconds)",
+                                    "description": "Indicates the maximum time the stop command is allowed to take before the application and the stop command itself are forcibly stopped (in seconds).",
                                     "type": "integer",
                                     "maximum": 60
                                 },
                                 "notify-timeout": {
-                                    "description": "Indicates the maximum time the app requires to initialize, become ready for operation, and notify the GEISA platform via the message bus it is running. (in seconds)",
+                                    "description": "Indicates the maximum time the app requires to initialize, become ready for operation, and notify the GEISA platform via the message bus it is running (in seconds).",
                                     "type": "integer",
                                     "maximum": 120
                                 }
@@ -372,3 +372,4 @@
         }
     }
 }
+
