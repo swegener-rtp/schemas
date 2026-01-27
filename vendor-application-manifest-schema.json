@@ -325,6 +325,8 @@
                             "type": "object",
                             "description": "Default settings for launching & restarting the application.",
                             "required": [
+                                "max-restarts",
+                                "restart-period",
                                 "start-timeout",
                                 "stop-timeout",
                                 "notify-timeout"
@@ -337,6 +339,14 @@
                                 "stop-string": {
                                     "description": "Command to use to stop the app.  If not provided, assumed to be shutdown of the container for LEE.",
                                     "type": "string"
+                                },
+                                "max-restarts": {
+                                    "description": "What is the maximum number of automatic restarts before marking the application as failed.",
+                                    "type": "integer"
+                                },
+                                "restart-period": {
+                                    "description": "Over what period (in seconds) can max-restarts occur?",
+                                    "type": "integer"
                                 },
                                 "start-background": {
                                     "description": "Indicates whether the start-string command will exit/return once launched (true) or continue running indefinently (false). Defaults to false if absent.",
