@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+enum GeisaConnState {
+	CONN_DISABLED = 0;
+	CONN_ENABLED_DOWN = 1;
+	CONN_ENABLED_UP = 2;
+}
+
+message GeisaConnInfo {
+	GeisaConnState state = 1;
+	bool ipv4 = 2;
+	bool ipv6 = 3;
+	bool realtime = 4;    // True: full IP real or near-realtime; False: UDP only, high latency/loss
+}
+
+message GeisaConnAppMsg {
+	uint32 yesterday_used = 1;
+	uint32 today_used = 2;
+	uint32 today_limit = 3;
+}
+
+enum GeisaConnPolicy {
+	CONN_POLICY_ZERO = 0;
+	CONN_POLICY_METERED = 1;
+	CONN_POLICY_UNLIMITED = 2;
+}
+
+message GeisaConnAppInfo {
+	GeisaConnPolicy policy = 1;
+	// in bytes
+	uint64 yesterday_used_unlimited = 10;
+	uint64 yesterday_used_metered = 11;
+	uint64 today_used_unlimited = 12;
+	uint64 today_used_metered = 13;
+	uint64 today_limit_metered = 14;
+}
+
+enum GeisaPlatMode {
+	PLAT_MODE_NORMAL = 0;
+	PLAT_MODE_UNPROVISIONED = 1;
+	PLAT_MODE_MANUFACTURING = 2;
+	PLAT_MODE_TEST = 3;
+}
+
+enum GeisaAppToPlatStatType {
+	APPTOPLAT_RUNNING = 0;
+	APPTOPLAT_RUNNING_CLEARED_PII = 2;        // set to ack cmd_clear_pii
+	APPTOPLAT_SHUTTING_DOWN = 3;              // set on receipt of cmd_shut_down
+	APPTOPLAT_NEED_TERMINATE_RESTART = 4;
+	APPTOPLAT_NEED_TERMINATE_NORESTART = 5;
+}
+
+
+// This is the most outer message for Platform Status
+// Message topic: geisa/api/platform-status
+message GeisaPlatformStatus {
+	GeisaPlatMode mode = 10;
+	GeisaConnState conn_msg = 20;
+	GeisaConnInfo conn_oper = 21;
+	GeisaConnInfo conn_inet = 22;
+	GeisaConnInfo conn_local = 23;
+	bool sys_over_temp = 30;
+	bool sys_high_cpu = 31;
+	bool sys_low_mem = 32;
+	bool sys_power_degraded = 33;
+	bool sys_power_loss = 34;
+	bool sys_reboot_soon = 35;
+	bool sys_shutdown_soon = 36;
+}
+
+// This is the most outer message for Platform To App Status
+// Message topic: geisa/api/platform-app-status/<userid>
+message GeisaPlatformToAppStatus {
+	bool cmd_send_status = 1;             // App should send a GeisaAppToPlatformStatus immeidately
+	bool cmd_shut_down = 2;               // transition to APPTOPLAT_SHUTTING_DOWN
+	bool cmd_clear_pii = 3;               // once done send APPTOPLAT_RUNNING_CLEARED_PII
+
+	// percentage (0-100)
+	float cpu_usage = 10;
+	float cpu_limit = 11;
+	// in bytes
+	uint32 memory_usage = 12;
+	uint32 memory_limit = 13;
+	uint32 persist_storage_usage = 14;
+	uint32 persist_storage_limit = 15;
+	uint32 nonpersist_storage_usage = 16;
+	uint32 nonpersist_storage_limit = 17;
+
+	GeisaConnAppMsg conn_msg = 20;
+	GeisaConnAppInfo conn_oper = 21;
+	GeisaConnAppInfo conn_inet = 22;
+	GeisaConnAppInfo conn_local = 23;
+
+}
+
+// This is the most outer message for App To Platform Status
+// Message topic: geisa/api/app-platform-status/<userid>
+message GeisaAppToPlatformStatus {
+	GeisaAppToPlatStatType type = 1;
+	int32 next_status = 10;              // How long until App will send next status
+	int32 next_status_timeout = 11;      // Timeout platfrom should use (recommended 2.5x next_status)
+}
+
