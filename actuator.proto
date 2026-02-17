@@ -1,0 +1,35 @@
+// GEISA Actuator Proto for GEISA API
+
+syntax = "proto3";
+
+//Enum of types of actuators.  Future actuators may include loadtap changers, cap banks etc.
+//Current design combines type and position/priority in a single setting.
+enum GeisaTypeActuator {
+	Service_Switch = 0;  //Assumed to be one and only one.  
+	DER_Switch = 10;  //Assumed to be one and only one.
+	LC_Relay_0 = 20; //May be multiple.  Platforms should always start at zero 
+	LC_Relay_1 = 21; //and increment 
+	LC_Relay_2 = 22;
+	LC_Relay_3 = 23;
+}
+
+//This is the outer most message for changing one or more actuator settings.
+//the sender submits GeisaActuatorStatus object(s) with the new target settings.
+//In the event that they send multiple GeisaActuatorStatus objects with the same target Actuator, 
+//last setting wins.  Note:  a platform may or may not apply the intervening settings. 
+//This behavior is indeterminate.  GEISA applications are encouraged NOT to submit
+//the same target twice in a single GeisaActuatorSet request	
+message GeisaActuatorSet_Req {
+	repeated GeisaActuatorStatus newSettings = 1; //What is/are the actuator(s) being set to?
+}
+
+//This is the outer most message for requesting the current Actuator Status
+message GeisaActuatorGet_Req {
+	GeisaTypeActuator actuator = 1; //Which actuator is being requested?
+}
+
+message GeisaActuatorStatus {
+	GeisaTypeActuator actuator = 1; //Which actuator is being referenced?
+	optional bool on = 2; //True for on/closed or false for off/open (false)
+	optional int32 position = 3; //Position or analog setting.  Platform specific. 
+}
