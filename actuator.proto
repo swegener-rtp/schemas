@@ -30,6 +30,6 @@ message GeisaActuatorGet_Req {
 
 message GeisaActuatorStatus {
 	GeisaTypeActuator actuator = 1; //Which actuator is being referenced?
-	optional bool on = 2; //True for on/closed or false for off/open (false)
-	optional int32 position = 3; //Position or analog setting.  Platform specific. 
+	int32  on = 2; //-1 unknown, 0 = off, 1 = on
+	int32 position = 3; //-1 unknown, otherwise position or analog setting.  Platform specific. 
 }
