@@ -28,8 +28,16 @@ message GeisaActuatorGet_Req {
 	GeisaTypeActuator actuator = 1; //Which actuator is being requested?
 }
 
+enum GeisaTypeOnOff {
+	Undefined = 0;
+	On = 1;
+	Off = 2;
+}
+
 message GeisaActuatorStatus {
 	GeisaTypeActuator actuator = 1; //Which actuator is being referenced?
-	optional bool on = 2; //True for on/closed or false for off/open (false)
-	optional int32 position = 3; //Position or analog setting.  Platform specific. 
+	GeisaTypeOnOff  on = 2; 
+	bool positionpresent = 3; // True if position included
+	int32 position = 4; // Position or analog setting. Platform specific
 }
+

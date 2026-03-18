@@ -11,6 +11,7 @@
 #   - make c:    protobuf-c .pb-c.c / .pb-c.h
 #   - make cpp:  C++ .pb.cc / .pb.h
 #   - make java: Java .java files
+#   - make python: Python .py files
 ###############################################################################
 # NOTE: Ubuntu LTS 22.04 may require the
 # --experimental_allow_proto3_optional flag for proto3 optional support.
@@ -23,6 +24,7 @@ BINPBDIR = $(BUILDDIR)/binpb
 CDIR      = $(BUILDDIR)/c
 CPPDIR    = $(BUILDDIR)/cpp
 JAVADIR   = $(BUILDDIR)/java
+PYTHONDIR   = $(BUILDDIR)/python
 
 PROTOC ?= protoc
 
@@ -61,6 +63,13 @@ CPP_HDRS = $(patsubst %.proto,$(CPPDIR)/%.pb.h,$(PROTOS))
 JAVA_STAMP = $(JAVADIR)/.java_generated
 
 ###############################################################################
+# Python outputs
+# protoc may generate multiple .py files depending on package/options,
+# so for Python we use a stamp file to let make know the command completed.
+###############################################################################
+PYTHON_STAMP = $(PYTHONDIR)/.python_generated
+
+###############################################################################
 # Default target: keep original behavior
 ###############################################################################
 all: $(BINPBS)
@@ -73,6 +82,8 @@ c: $(C_SRCS) $(C_HDRS)
 cpp: $(CPP_SRCS) $(CPP_HDRS)
 
 java: $(JAVA_STAMP)
+
+python: $(PYTHON_STAMP)
 
 ###############################################################################
 # .binpb generation
@@ -105,9 +116,18 @@ $(JAVA_STAMP): $(PROTOS)
 	@touch $@
 
 ###############################################################################
+# Python generation
+# One protoc invocation can generate multiple .py files, so use a stamp file.
+###############################################################################
+$(PYTHON_STAMP): $(PROTOS)
+	@mkdir -p $(PYTHONDIR)
+	$(PROTOC) $(PROTOC_FLAGS) --python_out=$(PYTHONDIR) $(PROTOS)
+	@touch $@
+
+###############################################################################
 # Convenience target to generate everything
 ###############################################################################
-langs: c cpp java
+langs: c cpp java python
 
 ###############################################################################
 # Clean
@@ -115,5 +135,5 @@ langs: c cpp java
 clean:
 	rm -rf $(BUILDDIR)
 
-.PHONY: all c cpp java langs clean
+.PHONY: all c cpp java python langs clean
 
