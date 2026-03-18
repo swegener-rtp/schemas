@@ -1,19 +1,18 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://github.com/geisa/schemas/blob/main/vendor-application-manifest-schema.json",
-    "title": "GEISA Vendor Application Manifest vX.Y.Z",
-    "description": "Provided Vendor recommended settings for a GEISA Application",
-    "$defs": {
+    "title": "GEISA Application Manifest vX.Y.Z",
+    "description": "Canonical manifest structure for a GEISA application. Vendors may supply this as a vendor application manifest, and operators may use the same structure for a deployment manifest.",
+        "$defs": {
         "transportAddressPort": {
             "type": "array",
             "$comment": "transport:address:port notation for network permissions.",
+            "minItems": 1,
             "items": {
                 "type": "string",
                 "minLength": 1,
                 "pattern": "^([Tt][Cc][Pp]:|[Uu][Dd][Pp]:|)([0-9A-Fa-f:\\.]+|\\[[0-9A-Fa-f:\\.]+\\]|)(:[0-9]+)$",
                 "$comment": "The RegEx above will match things beginning with a TCP, UDP, or nothing, followed by an IPv4 or v6 address (or not), and a port (required).  It does not validate the address itself."
             },
-            "minItems": 1,
             "uniqueItems": true
         },
         "networkAccessRequirements": {
@@ -21,7 +20,8 @@
             "properties": {
                 "daily-volume": {
                     "description": "The number of bytes the application needs to exchange each day through this interface.",
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 0
                 },
                 "inbound": {
                     "$comment": "transport/address/port tuples allowed inbound.",
@@ -51,12 +51,12 @@
         },
         "sha256Signature": {
             "type": "string",
-            "description": "SHA256 hash of in hexidecimal.",
+            "description": "SHA256 hash of in hexadecimal.",
             "pattern": "^[0-9A-Fa-f]+$",
             "minLength": 64,
             "maxLength": 64
         },
-        "fixedVerion": {
+        "fixedVersion": {
             "type": "string",
             "$comment": "fixedVersions do not allow values beyond the X.Y.Z triplet.",
             "pattern": "^[0-9]{1,}\\.[0-9]{1,}\\.[0-9]{1,}$"
@@ -65,7 +65,7 @@
             "$comment": "Allows for cases in which the version is set to null to indicate the feature is not supported.",
             "anyOf": [
                 {
-                    "$ref": "#/$defs/fixedVerion"
+                    "$ref": "#/$defs/fixedVersion"
                 },
                 {
                     "type": "null"
@@ -114,10 +114,10 @@
     },
     "type": "object",
     "required": [
-        "geisa-vendor-app-manifest"
+        "geisa-application-manifest"
     ],
     "properties": {
-        "geisa-vendor-app-manifest": {
+        "geisa-application-manifest": {
             "type": "object",
             "required": [
                 "manifest",
@@ -144,7 +144,7 @@
                     ],
                     "properties": {
                         "app-id": {
-                            "description": "Vendor assigned Text-based ID of the application, following reverse DNS name notation.",
+                            "description": "Text-based ID of the application, following reverse DNS name notation.",
                             "type": "string",
                             "minLength": 4
                         },
@@ -200,9 +200,9 @@
                         "artifacts": {
                             "type": "array",
                             "description": "List of one or more artifacts that comprise the application.",
+                            "minItems": 1,
                             "items": {
-                                "$ref": "#/$defs/geisaArtifact",
-                                "minItems": 1
+                                "$ref": "#/$defs/geisaArtifact"
                             }
                         },
                         "compatibility": {
@@ -218,15 +218,15 @@
                             "properties": {
                                 "GEISA-API": {
                                     "description": "Version of GEISA-API required.",
-                                    "$ref": "#/$defs/fixedVerion"
+                                    "$ref": "#/$defs/fixedVersion"
                                 },
                                 "GEISA-LEE": {
                                     "description": "Version of GEISA-LEE required. Null if unsupported.",
-                                    "$refs": "#/$defs/fixedVersionOrNull"
+                                    "$ref": "#/$defs/fixedVersionOrNull"
                                 },
                                 "GEISA-VEE": {
-                                    "description": "Version of GEISA-API required. Null if unsupported.",
-                                    "$refs": "#/$defs/fixedVersionOrNull"
+                                    "description": "Version of GEISA-VEE required. Null if unsupported.",
+                                    "$ref": "#/$defs/fixedVersionOrNull"
                                 },
                                 "toolchain-id": {
                                     "description": "Toolchain-id as provided by the toolchain vendors, typically platform provider ID and the target triplet, but may include other data",
@@ -236,7 +236,7 @@
                                 },
                                 "toolchain-version": {
                                     "description": "Version of the toolchain required.",
-                                    "$ref": "#/$defs/fixedVerion"
+                                    "$ref": "#/$defs/fixedVersion"
                                 }
                             }
                         },
@@ -261,11 +261,12 @@
                                 "storage-persistent": {
                                     "description": "The amount of storage in KiB the application requires.",
                                     "type": "integer",
-                                    "minimum": 1
+                                    "minimum": 0
                                 },
                                 "storage-nonpersistent": {
-                                    "description": "The amount of non-persistant storage (temp space) the application requires.",
-                                    "type": "integer"
+                                    "description": "The amount of non-persistent storage (temp space) the application requires.",
+                                    "type": "integer",
+                                    "minimum": 0
                                 },
                                 "threads": {
                                     "description": "The minimum number of threads the application requires.",
@@ -287,7 +288,7 @@
                                     "type": "boolean",
                                     "$comment": "This setting is independent of access to the messaging API."
                                 },
-                                "message": {
+                                "messaging": {
                                     "type": "object",
                                     "$comment": "If the application doesn't use system messaging, set to zero.  Apps may use messaging even if they do not have direct interface access.",
                                     "required": [
@@ -296,7 +297,8 @@
                                     "properties": {
                                         "daily-messages": {
                                             "description": "Allowed message count",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "minimum": 0
                                         }
                                     }
                                 },
@@ -316,7 +318,7 @@
                         },
                         "external-dependencies": {
                             "type": "array",
-                            "description": "This array lists the external dependendencies this application has.  This is expected to be a list of other applications, but this is not enforced in GEISA 1.0.",
+                            "description": "This array lists the external dependencies this application has.  This is expected to be a list of other applications, but this is not enforced in GEISA 1.0.",
                             "items": {
                                 "type": "string"
                             }
@@ -330,8 +332,32 @@
                                 "start-timeout",
                                 "stop-timeout",
                                 "notify-timeout"
-                            ],
-                            "properties": {
+                           ],
+                           "properties": {
+                                "auto-restart": {
+                                    "description": "Whether or not an application should be restarted in the event of a crash or other reason for being stopped.",
+                                    "type" :"boolean"
+                                },
+                                "max-restarts": {
+                                    "description": "What is the maximum number of automatic restarts before marking the application as failed.",
+                                    "type": "integer",
+                                    "minimum": 0
+                                },
+                                "restart-period": {
+                                    "description": "Over what period (in seconds) can max-restarts occur?",
+                                    "type": "integer",
+                                    "minimum": 0
+                                },
+                                "start-timeout": {
+                                    "description": "Indicates the maximum time (in seconds) the start command may take before a failure to start should be declared.  This value is unused if start-background is not true.",
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 60
+                                },
+                                "start-background": {
+                                    "description": "Indicates whether the start-string command will exit/return once launched (true) or continue running indefinitely (false). Defaults to false if absent.",
+                                    "type": "boolean"
+                                },
                                 "start-string": {
                                     "description": "Command to use to start the app.  If not provided, assumed to be init for LEE.",
                                     "type": "string"
@@ -340,37 +366,26 @@
                                     "description": "Command to use to stop the app.  If not provided, assumed to be shutdown of the container for LEE.",
                                     "type": "string"
                                 },
-                                "max-restarts": {
-                                    "description": "What is the maximum number of automatic restarts before marking the application as failed.",
-                                    "type": "integer"
-                                },
-                                "restart-period": {
-                                    "description": "Over what period (in seconds) can max-restarts occur?",
-                                    "type": "integer"
-                                },
-                                "start-background": {
-                                    "description": "Indicates whether the start-string command will exit/return once launched (true) or continue running indefinently (false). Defaults to false if absent.",
-                                    "type": "boolean"
-                                },
-                                "start-timeout": {
-                                    "description": "Indicates the maximum time the start command will take before a failure to start should be declared (in seconds).  This value is unused if start-background is not true.",
-                                    "type": "integer",
-                                    "maximum": 60
-                                },
                                 "stop-timeout": {
-                                    "description": "Indicates the maximum time the stop command is allowed to take before the application and the stop command itself are forcibly stopped (in seconds).",
+                                    "description": "Indicates the maximum time (in seconds) the stop command is allowed to take before the application and the stop command itself are forcibly stopped (in seconds).",
                                     "type": "integer",
+                                    "minimum": 0,
                                     "maximum": 60
                                 },
                                 "notify-timeout": {
                                     "description": "Indicates the maximum time the app requires to initialize, become ready for operation, and notify the GEISA platform via the message bus it is running (in seconds).",
                                     "type": "integer",
+                                    "minimum": 0,
                                     "maximum": 120
+                                },
+                                "watchdog": {
+                                    "description": "Whether or not a watchdog should be enabled for the application.",
+                                    "type":"boolean"
                                 }
                             }
                         },
                         "default-configuration": {
-                            "description": "The default configuration is vendor provided JSON object that the platform will make available to the app.  It's provided through the manifest process to allow the system operator to adjust it.",
+                            "description": "The default configuration is a JSON object that the platform will make available to the application. It is initially supplied by the Vendor then carried through the manifest process so that the system operator may review or adjust it.",
                             "type": "object"
                         }
                     }

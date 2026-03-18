@@ -4,17 +4,15 @@ message GeisaPlatformDiscovery_GEISA {
 	int32 ver_major = 1;
 	int32 ver_minor = 2;
 	int32 ver_rev = 3;
-	bool piller_adm = 10;
-	bool piller_api = 11;
-	bool piller_lee = 12;
-	bool piller_vee = 13;
+	bool pillar_adm = 10;
+	bool pillar_api = 11;
+	bool pillar_lee = 12;
+	bool pillar_vee = 13;
 }
 
 enum GeisaPlatformDiscovery_Type {
 	DEVICE_TYPE_UNSPECIFIED = 0;
-
 	DEVICE_TYPE_ELECTRIC_METER = 100;
-
 	DEVICE_TYPE_METROLOGY_PROCESSOR = 200;
 	DEVICE_TYPE_COMPUTE_CARD = 201;
 	DEVICE_TYPE_NETWORK_CARD = 202;
@@ -36,7 +34,12 @@ message GeisaPlatformDiscovery_Device {
 }
 
 message GeisaPlatformDiscovery_Operator {
-	/* TBD */
+	// Human-readable operator name, if provisioned.
+	string operator_name = 1;
+
+	// Operator-assigned identifier for the device, if provisioned
+	// This may be a serial number, asset identifier, or other operator-defined ID.
+	string operator_identifier = 2;
 }
 
 message GeisaPlatformDiscovery_Metrology {
@@ -71,9 +74,9 @@ message GeisaPlatformDiscovery_Waveform_Instance {
 	double voltage_multiplier = 201;
 	double current_multiplier = 202;
 
-	float num_voltage_ch = 300;
-	float num_current_ch = 301;
-	float num_other_ch = 302;
+	uint32 num_voltage_ch = 300;
+	uint32 num_current_ch = 301;
+	uint32 num_other_ch = 302;
 
 	// if true, the sampling rate is locked to and tracks a multiple of the AC frequency
 	// if false, the sampling rate matches the CPU clock and may drift vs the AC frequency
@@ -90,7 +93,7 @@ message GeisaPlatformDiscovery_Waveform_Instance {
 	// if a hardware or software filter is applied to the signal prior to delivery
 	// these are the frequency (in hz) of those filters.  if both low and high are
 	// provided, a bandpass filter is implied.
-	int32 voltage_filter_lowpass = 500;		
+	int32 voltage_filter_lowpass = 500;
 	int32 voltage_filter_highpass = 501;
 	int32 current_filter_lowpass = 502;
 	int32 current_filter_highpass = 503;
@@ -102,13 +105,13 @@ message GeisaPlatformDiscovery_Waveform {
 
 
 // This is the most outer message for GeisaPlatform Discovery Request
-// Message topic: geisa/api/platform-discovery-req
+// Message topic: geisa/api/platform/discovery/req
 // NOTE: Empty message for now but may be used in future
 message GeisaPlatformDiscovery_Req {
 }
 
 // This is the most outer message for GeisaPlatform Discovery Response
-// Message topic: geisa/api/platform-discovery-rsp
+// Message topic: geisa/api/platform/discovery/rsp
 message GeisaPlatformDiscovery_Rsp {
 	GeisaPlatformDiscovery_GEISA geisa = 1;
 	GeisaPlatformDiscovery_Device device = 2;
@@ -119,17 +122,16 @@ message GeisaPlatformDiscovery_Rsp {
 	GeisaPlatformDiscovery_Waveform waveform = 7;
 }
 
-
 // This is the most outer message for Application Manifest Request
-// Message topic: geisa/api/app-manifest-req/<userid>
+// Message topic: geisa/api/app-manifest/req/<userid>
 // NOTE: Empty message for now but may be used in future
-message ApplicationManifest_Req {
+// message topic: geisa/api/app/manifest/req/<userid>
+message GeisaApplicationDeploymentManifest_Req {
 }
 
-// This is the most outer message for Application Manifest Response
-// Message topic: geisa/api/app-manifest-rsp/<userid>
-message ApplicationManifest_Rsp {
-	string manifest = 1; // Spec shows this as json
+// message topic: geisa/api/app/manifest/rsp/<userid>
+message GeisaApplicationDeploymentManifest_Rsp {
+	string manifest = 1; // UTF-8 JSON serialized Deployment Application Deployment Manifest
 }
 
 

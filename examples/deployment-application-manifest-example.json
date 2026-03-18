@@ -1,8 +1,8 @@
 {
     "geisa-application-manifest": {
-        "$comment": "Example vendor application manifest. Defines vendor-supplied application identity, compatibility requirements, defaults, requested permissions, and minimum resources prior to operator review or deployment-time override.",
+        "$comment": "Example deployment manifest derived from the vendor application manifest. Shows operator-approved effective settings for deployment on a specific class of platform.",
         "manifest": {
-            "$comment": "Core application metadata and vendor-recommended settings.",
+            "$comment": "Application identity and compatibility are preserved from the vendor application manifest unless explicitly overridden below.",
             "app-id": "org.lfenergy.geisa.testapp",
             "author": "GEISA Developer",
             "name": "Awesome App",
@@ -11,7 +11,7 @@
             "manifest-version": "1.0.0",
             "artifacts": [
                 {
-                    "$comment": "Single application artifact example. Additional artifact types may be added in future GEISA revisions.",
+                    "$comment": "Deployment continues to use the same application artifact as the vendor manifest in this example.",
                     "image-name": "AwesomeApp.tgz",
                     "image-type": "appoverlay",
                     "image-size": 262144,
@@ -20,7 +20,7 @@
                 }
             ],
             "api-access": {
-                "$comment": "Requested GEISA API access. Final granted access remains subject to platform and operator policy.",
+                "$comment": "API access is accepted unchanged from the vendor application manifest in this example.",
                 "actuator": true,
                 "messaging": true,
                 "instantaneous": false,
@@ -28,7 +28,7 @@
                 "waveform": false
             },
             "compatibility": {
-                "$comment": "Application requires GEISA API and LEE version 1.0.0, does not require VEE support, and identifies a vendor-defined toolchain target.",
+                "$comment": "Compatibility requirements are preserved from the vendor application manifest.",
                 "GEISA-API": "1.0.0",
                 "GEISA-LEE": "1.0.0",
                 "GEISA-VEE": null,
@@ -36,43 +36,43 @@
                 "toolchain-version": "1.0.0"
             },
             "default-configuration": {
-                "$comment": "Vendor default configuration values. Operators may override these in the deployment manifest.",
-                "volume": 11,
-                "turbo-encabulator": "on",
+                "$comment": "Operator override of vendor defaults. Volume is reduced and one feature is disabled for this deployment.",
+                "volume": 8,
+                "turbo-encabulator": "off",
                 "oscillation-overthruster": "enabled"
             },
             "default-launch-strategy": {
-                "$comment": "Vendor-recommended launch and restart behavior. Final enforcement may be subject to platform and operator policy. Watchdog behavior remains under broader discussion.",
+                "$comment": "Operator-adjusted restart behavior. Restart count is reduced, restart window is increased, and notify timeout is increased. Final enforcement remains subject to platform policy.",
                 "auto-restart": true,
-                "max-restarts": 5,
-                "restart-period": 60,
+                "max-restarts": 3,
+                "restart-period": 120,
                 "start-timeout": 5,
                 "stop-timeout": 5,
-                "notify-timeout": 5,
+                "notify-timeout": 10,
                 "watchdog": true
             },
             "external-dependencies": [],
             "communication": {
-                "$comment": "Requested communication access and limits. This example requests messaging access, HAN access, and local outbound network usage with a daily volume limit.",
+                "$comment": "Operator-restricted communication limits relative to the vendor manifest.",
                 "messaging": {
-                    "$comment": "Vendor-requested message-bus usage limit.",
-                    "daily-messages": 20
+                    "$comment": "Deployment reduces permitted daily message-bus usage.",
+                    "daily-messages": 10
                 },
                 "HAN": true,
                 "local": {
-                    "$comment": "Vendor-requested local network usage. Outbound TCP port 80 is permitted in this example.",
-                    "daily-volume": 5000,
+                    "$comment": "Deployment reduces allowed local network daily volume while preserving the same outbound port access.",
+                    "daily-volume": 2500,
                     "outbound": [
                         "tcp::80"
                     ]
                 }
             },
             "resources": {
-                "$comment": "Vendor-requested minimum resource requirements.",
-                "app-cpu": 20,
+                "$comment": "Operator-adjusted resource allocation. CPU and persistent storage are reduced relative to the vendor manifest while other minimum resources remain unchanged.",
+                "app-cpu": 15,
                 "threads": 1,
                 "app-ram": 200,
-                "storage-persistent": 2000,
+                "storage-persistent": 1500,
                 "storage-nonpersistent": 0
             }
         },
