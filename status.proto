@@ -52,7 +52,7 @@ enum GeisaAppToPlatStatType {
 
 
 // This is the most outer message for Platform Status
-// Message topic: geisa/api/platform-status
+// Message topic: geisa/api/platform/status
 message GeisaPlatformStatus {
 	GeisaPlatMode mode = 10;
 	GeisaConnState conn_msg = 20;
@@ -69,12 +69,12 @@ message GeisaPlatformStatus {
 }
 
 // This is the most outer message for Platform To App Status
-// Message topic: geisa/api/platform-app-status/<userid>
+// Message topic: geisa/api/platform/app/status/<userid>
 message GeisaPlatformToAppStatus {
-	bool cmd_send_status = 1;             // App should send a GeisaAppToPlatformStatus immeidately
-	bool cmd_shut_down = 2;               // transition to APPTOPLAT_SHUTTING_DOWN
-	bool cmd_clear_pii = 3;               // once done send APPTOPLAT_RUNNING_CLEARED_PII
-
+	bool cmd_send_status = 1;           // App should send a GeisaAppToPlatformStatus immeidately
+	bool cmd_shut_down = 2;             // transition to APPTOPLAT_SHUTTING_DOWN
+	bool cmd_clear_pii = 3;             // once done send APPTOPLAT_RUNNING_CLEARED_PII
+	uint64 timestamp_ms = 1000;			// UTC epoch time in milliseconds when this message was *generated* by the platform
 	// percentage (0-100)
 	float cpu_usage = 10;
 	float cpu_limit = 11;
@@ -90,11 +90,10 @@ message GeisaPlatformToAppStatus {
 	GeisaConnAppInfo conn_oper = 21;
 	GeisaConnAppInfo conn_inet = 22;
 	GeisaConnAppInfo conn_local = 23;
-
 }
 
 // This is the most outer message for App To Platform Status
-// Message topic: geisa/api/app-platform-status/<userid>
+// Message topic: geisa/api/app/platform/status/<userid>
 message GeisaAppToPlatformStatus {
 	GeisaAppToPlatStatType type = 1;
 	int32 next_status = 10;              // How long until App will send next status
